@@ -8,5 +8,11 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
+    
+       <item
+        android:id="@+id/action_settings2"
+        android:orderInCategory="100"
+        android:title="nothing here... blub"
+        app:showAsAction="never"/>
 
 </menu>
