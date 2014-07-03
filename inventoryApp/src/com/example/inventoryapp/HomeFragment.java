@@ -32,6 +32,7 @@ public class HomeFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		mActivity = activity;
+		System.out.println(mActivity);
 	}
 
 

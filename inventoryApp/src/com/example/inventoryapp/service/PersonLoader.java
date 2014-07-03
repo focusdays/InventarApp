@@ -13,6 +13,8 @@ public class PersonLoader implements IPersonLoader {
 
 	public PersonModel getPerson(Activity activity) {
 		
+		person = new PersonModel();
+		
 		Cursor c = activity.getContentResolver().query(
 				ContactsContract.Profile.CONTENT_URI, null, null, null, null);
 		
