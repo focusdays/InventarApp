@@ -10,11 +10,16 @@ import android.widget.TextView;
 
 import com.example.inventoryapp.model.PersonModel;
 import com.example.inventoryapp.service.PersonLoader;
+import com.example.inventoryappbase.core.location.SimpleAddress;
 
 public class MainActivity extends RoboActivity {
 
 	@InjectView(R.id.personName) private TextView personNameText;
 	@InjectView(R.id.personId) private TextView personIdText;
+	@InjectView(R.id.locationAddress) private TextView locationAddress;
+	@InjectView(R.id.locationZipCity) private TextView locationZipCity;
+	@InjectView(R.id.locationCountry) private TextView locationCountry;
+	@InjectView(R.id.locationGPS) private TextView locationGPS;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +29,12 @@ public class MainActivity extends RoboActivity {
 		PersonModel personModel = new PersonLoader().getPerson(this);
 		
 		personNameText.setText(personModel.getPersonName());
-
 		personIdText.setText(personModel.getPersonId());
-
+//		SimpleAddress addr = personModel.getLocation().getAddress();
+//		locationAddress.setText(addr.getAddress());
+//		locationZipCity.setText(addr.getZip() +" "+addr.getCity());
+//		locationCountry.setText(addr.getCountry());
+//		locationGPS.setText(addr.getPosition().toString());
 	}
 	
 	public void onEditInventoryClicked(View view){

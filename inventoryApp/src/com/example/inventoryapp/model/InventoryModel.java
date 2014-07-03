@@ -6,7 +6,7 @@ import java.util.List;
 public class InventoryModel extends AbstractModel {
 	
 	private int inventoryId;
-	private List<Object> inventoryCommodities = new ArrayList<Object>();
+	private List<CommodityModel> inventoryCommodities = new ArrayList<CommodityModel>();
 	
 	
 	
@@ -23,10 +23,10 @@ public class InventoryModel extends AbstractModel {
 	public void setInventoryId(int inventoryId) {
 		this.inventoryId = inventoryId;
 	}
-	public List<Object> getInventoryCommodities() {
+	public List<CommodityModel> getInventoryCommodities() {
 		return inventoryCommodities;
 	}
-	public void setInventoryCommodities(List<Object> inventoryCommodities) {
+	public void setInventoryCommodities(List<CommodityModel> inventoryCommodities) {
 		this.inventoryCommodities = inventoryCommodities;
 	}
 	

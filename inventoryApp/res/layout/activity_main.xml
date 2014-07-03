@@ -30,7 +30,36 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="id" />
+        
+        <TextView
+            android:id="@+id/locationAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="locationAddress" />
 
+        <TextView
+            android:id="@+id/locationZipCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="locationZipCity" />
+
+        <TextView
+            android:id="@+id/locationCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="locationCountry" />
+
+        <TextView
+            android:id="@+id/locationGPS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="locationGPS" />
+        
+        
         <Button
             android:id="@+id/button1"
             android:layout_width="wrap_content"
