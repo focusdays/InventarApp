@@ -1,9 +1,21 @@
 package com.example.inventoryapp.model;
 
-public class PersonModel {
+import java.util.ArrayList;
+import java.util.List;
+
+public class PersonModel extends AbstractModel {
+	
+	private static PersonModel personModel;
 	
 	private String personName;
 	private String personId;
+	
+	private List<InventoryModel> inventoryList =  new ArrayList<InventoryModel>();
+	
+	private PersonModel() {
+		super();
+		this.inventoryList.add(new InventoryModel());
+	}
 	
 	public String getPersonName() {
 		return personName;
@@ -16,6 +28,19 @@ public class PersonModel {
 	}
 	public void setPersonId(String personId) {
 		this.personId = personId;
+	}
+	public List<InventoryModel> getInventaryList() {
+		return inventoryList;
+	}
+	public void setInventaryList(List<InventoryModel> inventaryList) {
+		this.inventoryList = inventaryList;
+	}
+	
+	public static PersonModel getPersonInstance(){
+		if(personModel == null){
+			personModel = new PersonModel();
+		}
+		return personModel;
 	}
 
 	

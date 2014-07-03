@@ -42,6 +42,8 @@ public class HomeFragment extends Fragment {
 
 		TextView personNameText = (TextView) rootView
 				.findViewById(R.id.personName);
+
+
 		personNameText.setText(personModel.getPersonName());
 
 		TextView personIdText = (TextView) rootView.findViewById(R.id.personId);
