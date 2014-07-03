@@ -24,11 +24,11 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		PlaceholderFragment fragment = new PlaceholderFragment();
+		HomeFragment home = new HomeFragment();
 
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, fragment).commit();
+					.add(R.id.container, home).commit();
 		}
 
 	}
