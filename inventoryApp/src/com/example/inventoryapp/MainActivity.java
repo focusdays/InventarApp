@@ -23,15 +23,18 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
 		HomeFragment home = new HomeFragment();
 
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, home).commit();
 		}
+		
 
 	}
+	
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

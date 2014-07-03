@@ -2,8 +2,8 @@ package com.example.inventoryapp.model;
 
 public class PersonModel {
 	
-	private String personName = "Peter Test";
-	private String personId= "peter.test@example.com";
+	private String personName;
+	private String personId;
 	
 	public String getPersonName() {
 		return personName;
