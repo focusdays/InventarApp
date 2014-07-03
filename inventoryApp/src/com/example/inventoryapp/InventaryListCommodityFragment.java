@@ -18,13 +18,13 @@ public class InventaryListCommodityFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_inventary_list, container,
+		View rootView = inflater.inflate(R.layout.fragment_inventary_list_commodity, container,
 				false);
 		
 		
 		PersonModel personModel = PersonModel.getPersonInstance();
 		
-		ListView inventoryListView = (ListView) rootView.findViewById(R.id.inventaryList);
+		//ListView inventoryListView = (ListView) rootView.findViewById(R.id.inventaryList);
 		
 		
 		

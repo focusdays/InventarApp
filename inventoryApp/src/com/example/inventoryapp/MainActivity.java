@@ -1,40 +1,38 @@
 package com.example.inventoryapp;
 
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-public class MainActivity extends ActionBarActivity {
+import com.example.inventoryapp.model.PersonModel;
 
-	public Button send;
-	public EditText name;
-	public TextView message;
+public class MainActivity extends RoboActivity {
 
+	@InjectView(R.id.personName) private TextView personNameText;
+	@InjectView(R.id.personId) private TextView personIdText;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		HomeFragment home = new HomeFragment();
-
-		if (savedInstanceState == null) {
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, home).commit();
-		}
+		PersonModel personModel = PersonModel.getPersonInstance();
 		
+		personNameText.setText(personModel.getPersonName());
+
+		personIdText.setText(personModel.getPersonId());
 
 	}
 	
-
+	public void onEditInventoryClicked(View view){
+		startActivityForResult(new Intent(this, InventoryListActivity.class), 1);
+		
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -43,56 +41,4 @@ public class MainActivity extends ActionBarActivity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment implements
-			OnClickListener {
-
-		public PlaceholderFragment() {
-		}
-
-		EditText name;
-		Button send;
-		TextView message;
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
-					false);
-
-			send = (Button) rootView.findViewById(R.id.sendButton);
-			name = (EditText) rootView.findViewById(R.id.name);
-			message = (TextView) rootView.findViewById(R.id.message);
-
-			send.setOnClickListener(this);
-			return rootView;
-		}
-
-		@Override
-		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.sendButton:
-				message.setText("Hello " + name.getText());
-
-				break;
-
-			}
-		}
-	}
-
 }
