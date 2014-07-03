@@ -5,29 +5,26 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.inventoryapp.model.PersonModel;
 
-public class HomeFragment extends Fragment {
+public class InventaryListCommodityFragment extends Fragment {
 	
-	public HomeFragment() {
+	public InventaryListCommodityFragment() {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_home, container,
+		View rootView = inflater.inflate(R.layout.fragment_inventary_list, container,
 				false);
 		
 		
 		PersonModel personModel = PersonModel.getPersonInstance();
 		
-		TextView personNameText = (TextView) rootView.findViewById(R.id.personName);
-		personNameText.setText(personModel.getPersonName());
-		
-		TextView personIdText = (TextView) rootView.findViewById(R.id.personId);
-		personIdText.setText(personModel.getPersonId());
+		ListView inventoryListView = (ListView) rootView.findViewById(R.id.inventaryList);
 		
 		
 		
