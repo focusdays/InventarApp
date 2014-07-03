@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.inventoryapp.model.PersonModel;
+import com.example.inventoryapp.service.PersonLoader;
 
 public class MainActivity extends RoboActivity {
 
@@ -20,7 +21,7 @@ public class MainActivity extends RoboActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		PersonModel personModel = PersonModel.getPersonInstance();
+		PersonModel personModel = new PersonLoader().getPerson(this);
 		
 		personNameText.setText(personModel.getPersonName());
 
