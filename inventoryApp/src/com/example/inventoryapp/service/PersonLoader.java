@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class PersonLoader implements IPersonLoader, ConnectionCallbacks, OnConnectionFailedListener  {
 
+	@Override
 	public PersonModel getPerson(Activity activity) {
 		
 		PersonModel person = PersonModel.getPersonInstance();
@@ -28,7 +30,7 @@ public class PersonLoader implements IPersonLoader, ConnectionCallbacks, OnConne
 		Cursor c = activity.getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
 		try {
 			c.moveToFirst();
-			person.setPersonId(c.getString(c.getColumnIndex(ContactsContract.Contacts._ID)));
+			person.setPersonId(c.getString(c.getColumnIndex(BaseColumns._ID)));
 			person.setPersonName(c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
 		} finally {
 			c.close();
