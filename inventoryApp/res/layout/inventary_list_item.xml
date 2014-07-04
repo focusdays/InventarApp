@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/commodityId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="id" />
+
+    <TextView
+        android:id="@+id/commodityTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/commodityId"
+        android:maxLines="@integer/maxLines"
+        android:paddingBottom="10dp"
+        android:text="Titel sdfkjlasdfkl askldföalskdjfl alsdhfakshdf" />
+
+    <TextView
+        android:id="@+id/commodityPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/commodityTitle"
+        android:layout_alignBottom="@+id/commodityTitle"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="false"
+        android:layout_marginRight="10dp"
+        android:text="Preis" />
+
+</RelativeLayout>

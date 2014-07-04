@@ -71,7 +71,7 @@ public class CommodityModel extends AbstractModel {
 	}
 	
 	public static CommodityModel createCommodity2() {
-		return new CommodityModel("Stuhl", CommodityType.Moebel, 100, null);
+		return new CommodityModel("Stuhl mit ganz vielen Beinen Beinen Beinen", CommodityType.Moebel, 100, null);
 	}
 	
 	public static CommodityModel createCommodity3() {
