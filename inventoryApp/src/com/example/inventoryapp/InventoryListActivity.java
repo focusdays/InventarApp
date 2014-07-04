@@ -101,7 +101,6 @@ public class InventoryListActivity extends RoboActivity {
 
 					startActivity(intent);
 
-					finish();
 				}});
 
 			return rowView;

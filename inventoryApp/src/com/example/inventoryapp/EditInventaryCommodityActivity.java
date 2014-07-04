@@ -8,11 +8,11 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.inventoryapp.model.CommodityModel;
-import com.example.inventoryapp.service.PersonLoader;
+import com.example.inventoryapp.model.PersonModel;
 
 public class EditInventaryCommodityActivity extends RoboActivity {
 
-	private List<CommodityModel> cList;
+	private List<CommodityModel> commodities;
 	private CommodityModel selectedCommodity;
 	
 //	public EditInventaryCommodityActivity(List<CommodityModel> commodityList) {
@@ -27,45 +27,34 @@ public class EditInventaryCommodityActivity extends RoboActivity {
 	@InjectView(R.id.textTitel) private TextView inventaryPrices;
 	@InjectView(R.id.textPrice) private TextView inventaryCommodityprice;
 	@InjectView(R.id.textType) private TextView inventaryCommodityType;
+	@InjectView(R.id.textName) private TextView inventaryCommodityName;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_inventory_main);
-				
-		setcList(new PersonLoader().getPerson(this).getSingleInventary().getInventoryCommodities());
-		setSelectedCommodity (getFirstCommodity());
+		
+		commodities = PersonModel.getPersonInstance().getSingleInventary().getInventoryCommodities();
+						
+		Bundle b = getIntent().getExtras();
+
+		int index = b.getInt("commodityIndex", 0);
+		setSelectedCommodity (commodities.get(index));
 		inventaryPrices.setText(getInventaryPricesText());
-		inventaryCommodityprice.setText(((Integer) getSelectedCommodity().getCommodityPrice()).toString());
-		inventaryCommodityType.setText("Möbel");
+		inventaryCommodityprice.setText("" + getSelectedCommodity().getCommodityPrice());
+		inventaryCommodityType.setText("" + getSelectedCommodity().getCommodityType());
+		inventaryCommodityName.setText(getSelectedCommodity().getCommodityTitle());
 	}
 
-	private CharSequence getInventaryPricesText() {
+	private String getInventaryPricesText() {
 		StringBuilder b = new StringBuilder();
 		Integer summe = 0;
-		for (CommodityModel c : cList) {
+		for (CommodityModel c : commodities) {
 			summe = summe + c.getCommodityPrice();
 		}
-		b.append("47000");
-		b.append(" CHF / ");
 		b.append(summe.toString());
 		b.append(" CHF");
 		return b.toString();
-	}
-
-	private CommodityModel getFirstCommodity() {
-		for ( CommodityModel c : cList) {
-			return c;
-		}
-		return null;
-	}
-
-	public List<CommodityModel> getcList() {
-		return cList;
-	}
-
-	public void setcList(List<CommodityModel> cList) {
-		this.cList = cList;
 	}
 
 	public CommodityModel getSelectedCommodity() {
