@@ -3,5 +3,15 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="top_priceLabel">40dp</dimen>
+    <dimen name="top_typeLabel">70dp</dimen>
+    <dimen name="top_nameLabel">100dp</dimen>
+    <dimen name="top_priceText">30dp</dimen>
+    <dimen name="top_typeText">60dp</dimen>
+    <dimen name="top_nameText">90dp</dimen>
+    <dimen name="imageSwitcher_top">140dp</dimen>
+    <dimen name="imageSwitcher_bottom">50dp</dimen>
+    <dimen name="imageSwitcher_left">20dp</dimen>
+    <dimen name="imageSwitcher_right">20dp</dimen>
 
 </resources>

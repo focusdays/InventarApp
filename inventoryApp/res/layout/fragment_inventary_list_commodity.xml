@@ -6,7 +6,7 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textTitel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -16,23 +16,23 @@
         android:text="id" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView1"
-        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignBaseline="@+id/textTitel"
+        android:layout_alignBottom="@+id/textTitel"
         android:layout_marginLeft="21dp"
-        android:layout_toRightOf="@+id/textView1"
+        android:layout_toRightOf="@+id/textTitel"
         android:text="Titel" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView2"
-        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignBaseline="@+id/label"
+        android:layout_alignBottom="@+id/label"
         android:layout_marginLeft="46dp"
-        android:layout_toRightOf="@+id/textView2"
+        android:layout_toRightOf="@+id/label"
         android:text="Preis" />
 
 </RelativeLayout>
