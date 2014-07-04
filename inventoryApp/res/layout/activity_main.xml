@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.inventoryapp.MainActivity"
-    tools:ignore="MergeRootFrame" >
+    tools:ignore="MergeRootFrame" 
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,6 +68,15 @@
             android:layout_gravity="center_horizontal"
             android:onClick="onEditInventoryClicked"
             android:text="Edit Inventory" />
+        
+                
+        <Button
+            android:id="@+id/picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="onNewClicked"
+            android:text="New" />
     </LinearLayout>
 
 </FrameLayout>

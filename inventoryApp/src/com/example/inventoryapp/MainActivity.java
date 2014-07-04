@@ -10,36 +10,48 @@ import android.widget.TextView;
 
 import com.example.inventoryapp.model.PersonModel;
 import com.example.inventoryapp.service.PersonLoader;
-import com.example.inventoryappbase.core.location.SimpleAddress;
 
 public class MainActivity extends RoboActivity {
 
-	@InjectView(R.id.personName) private TextView personNameText;
-	@InjectView(R.id.personId) private TextView personIdText;
-	@InjectView(R.id.locationAddress) private TextView locationAddress;
-	@InjectView(R.id.locationZipCity) private TextView locationZipCity;
-	@InjectView(R.id.locationCountry) private TextView locationCountry;
-	@InjectView(R.id.locationGPS) private TextView locationGPS;
-	
+	@InjectView(R.id.personName)
+	private TextView personNameText;
+	@InjectView(R.id.personId)
+	private TextView personIdText;
+	@InjectView(R.id.locationAddress)
+	private TextView locationAddress;
+	@InjectView(R.id.locationZipCity)
+	private TextView locationZipCity;
+	@InjectView(R.id.locationCountry)
+	private TextView locationCountry;
+	@InjectView(R.id.locationGPS)
+	private TextView locationGPS;
+
+	protected static final int CAMERA_PIC_REQUEST = 3;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		PersonModel personModel = new PersonLoader().getPerson(this);
-		
+
 		personNameText.setText(personModel.getPersonName());
 		personIdText.setText(personModel.getPersonId());
-//		SimpleAddress addr = personModel.getLocation().getAddress();
-//		locationAddress.setText(addr.getAddress());
-//		locationZipCity.setText(addr.getZip() +" "+addr.getCity());
-//		locationCountry.setText(addr.getCountry());
-//		locationGPS.setText(addr.getPosition().toString());
+		// SimpleAddress addr = personModel.getLocation().getAddress();
+		// locationAddress.setText(addr.getAddress());
+		// locationZipCity.setText(addr.getZip() +" "+addr.getCity());
+		// locationCountry.setText(addr.getCountry());
+		// locationGPS.setText(addr.getPosition().toString());
 	}
-	
-	public void onEditInventoryClicked(View view){
+
+	public void onEditInventoryClicked(View view) {
 		startActivityForResult(new Intent(this, InventoryListActivity.class), 1);
-		
+
+	}
+
+	public void onNewClicked(View view) {
+		startActivityForResult(new Intent(this, CameraActivity.class), 1);
+
 	}
 
 	@Override
@@ -49,4 +61,5 @@ public class MainActivity extends RoboActivity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+
 }

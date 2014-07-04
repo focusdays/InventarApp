@@ -57,7 +57,7 @@ public class ImageHelper {
 	}
 	
 	public ImageHelper shrink(String newFileName, Size maxSize) throws IOException {
-		float scaleW = (float)maxSize.getWidth() / (float)this.getImage().getWidth();
+		float scaleW = maxSize.getWidth() / (float)this.getImage().getWidth();
 		Matrix matrix = new Matrix();
         matrix.setScale(scaleW, scaleW);
         return new ImageHelper(

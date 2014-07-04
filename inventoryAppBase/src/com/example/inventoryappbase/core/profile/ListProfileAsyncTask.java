@@ -17,6 +17,7 @@ public class ListProfileAsyncTask extends AsyncTask<Void, Void, Map<String, Stri
 	public ListProfileAsyncTask(Activity act) {
         this.activity = act;
     }
+	@Override
 	protected Map<String, String> doInBackground(Void... params) {
 		Cursor c = activity.getContentResolver().query(
 				ContactsContract.Profile.CONTENT_URI, null, null, null, null);

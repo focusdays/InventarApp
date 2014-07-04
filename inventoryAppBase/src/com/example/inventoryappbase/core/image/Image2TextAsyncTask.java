@@ -1,12 +1,8 @@
 package com.example.inventoryappbase.core.image;
 
 import java.io.File;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;

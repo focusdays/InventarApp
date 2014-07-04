@@ -3,8 +3,8 @@ package com.example.inventoryappbase.core.ean;
 import java.io.IOException;
 import java.net.URLEncoder;
 
-import org.jsoup.Jsoup;
 import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
 
 import android.util.Log;
 
