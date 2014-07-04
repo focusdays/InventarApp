@@ -18,6 +18,13 @@ public class PersonModel extends AbstractModel {
 		this.inventoryList.add(new InventoryModel());
 	}
 	
+	public InventoryModel getSingleInventary() {
+		for (InventoryModel inv : getInventaryList()) {
+			return inv;
+		}
+		return null;
+	}
+	
 	public String getPersonName() {
 		return personName;
 	}
