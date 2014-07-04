@@ -10,9 +10,10 @@ import android.widget.TextView;
 
 import com.example.inventoryapp.model.PersonModel;
 import com.example.inventoryapp.service.PersonLoader;
+import com.example.inventoryappbase.core.AsyncResponse;
 import com.example.inventoryappbase.core.location.SimpleAddress;
 
-public class MainActivity extends RoboActivity {
+public class MainActivity extends RoboActivity implements AsyncResponse<PersonModel, Void> {
 
 	@InjectView(R.id.personName) private TextView personNameText;
 	@InjectView(R.id.personId) private TextView personIdText;
@@ -25,16 +26,8 @@ public class MainActivity extends RoboActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		PersonModel personModel = new PersonLoader().getPerson(this);
-		
-		personNameText.setText(personModel.getPersonName());
-		personIdText.setText(personModel.getPersonId());
-//		SimpleAddress addr = personModel.getLocation().getAddress();
-//		locationAddress.setText(addr.getAddress());
-//		locationZipCity.setText(addr.getZip() +" "+addr.getCity());
-//		locationCountry.setText(addr.getCountry());
-//		locationGPS.setText(addr.getPosition().toString());
+
+		new PersonLoader(this, this).loadCurrentPerson();
 	}
 	
 	public void onEditInventoryClicked(View view){
@@ -49,4 +42,29 @@ public class MainActivity extends RoboActivity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+
+	@Override
+	public void processFinish(PersonModel person) {
+		personNameText.setText(person.getPersonName());
+		personIdText.setText(person.getPersonId());
+		if (person.getLocation() != null){
+			SimpleAddress addr = person.getLocation().getAddress();
+			locationAddress.setText(addr.getAddress());
+			locationZipCity.setText(addr.getZip() +" "+addr.getCity());
+			locationCountry.setText(addr.getCountry());
+			locationGPS.setText(addr.getPosition().toString());		
+		}
+		
+	}
+
+	@Override
+	public void processProgress(Void level) {
+		
+	}
+
+	@Override
+	public void processTime(long timeInMs) {
+		
+	}
+
 }

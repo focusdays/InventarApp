@@ -11,7 +11,7 @@ public class PersonModel extends AbstractModel {
 	private String personId;
 	
 	private List<InventoryModel> inventoryList =  new ArrayList<InventoryModel>();
-	private LocationModel location = new LocationModel(this);
+	private LocationModel location;
 	
 	private PersonModel() {
 		super();
@@ -46,6 +46,10 @@ public class PersonModel extends AbstractModel {
 
 	public LocationModel getLocation() {
 		return location;
+	}
+
+	public void setLocation(LocationModel location) {
+		this.location = location;
 	}
 
 	

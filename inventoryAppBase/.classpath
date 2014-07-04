@@ -6,5 +6,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/google-play-services_lib"/>
+	<classpathentry kind="lib" path="libs/odata4j-examples-0.7.0.jar" sourcepath="libs/odata4j-examples-0.7.0-sources.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
