@@ -3,6 +3,7 @@ package com.example.inventoryapp;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -75,6 +76,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 
 				try {
 					FileOutputStream fos = new FileOutputStream(PATH);
+					System.out.println(PATH);
 
 					fos.write(data);
 					fos.close();
