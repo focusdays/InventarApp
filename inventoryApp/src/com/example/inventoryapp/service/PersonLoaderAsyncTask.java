@@ -25,8 +25,8 @@ public class PersonLoaderAsyncTask extends AsyncTask<String, Void, PersonModel> 
 	    }
 		OEntity personEntity = JsonGrabbingConsumer.getInstance().getPerson(personId[0]);
 		PersonModel person = this.mapPerson(personEntity);
-		this.mapLocation(person, JsonGrabbingConsumer.getInstance().getLocation(personEntity));
-		this.mapInventories(person, JsonGrabbingConsumer.getInstance().getInventories(personEntity));
+//		this.mapLocation(person, JsonGrabbingConsumer.getInstance().getLocation(personEntity));
+//		this.mapInventories(person, JsonGrabbingConsumer.getInstance().getInventories(personEntity));
 //		this.mapCommodities(person, JsonGrabbingConsumer.getInstance().getCommodities(personEntity));
 		
 		return person;
