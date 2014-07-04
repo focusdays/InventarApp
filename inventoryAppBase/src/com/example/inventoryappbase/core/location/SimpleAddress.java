@@ -6,7 +6,11 @@ import android.content.Intent;
 import com.google.android.gms.maps.model.LatLng;
 
 public final class SimpleAddress extends Intent {
-	
+
+	public SimpleAddress() {
+		
+	}
+
 	public SimpleAddress(Intent o) {
 		super(o);
 		this.setAddress(o.getStringExtra("currentLocationAddress"));
