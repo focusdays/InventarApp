@@ -31,7 +31,7 @@ public class EditInventaryCommodityActivity extends RoboActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.edit_inventory_main);
 		
 		inventaryPrices.setTag("54'000 CHF / 140'000 CHF");
 		inventaryCommodityprice.setText("140 CHF");

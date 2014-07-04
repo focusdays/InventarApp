@@ -41,6 +41,10 @@
             android:name="com.example.inventoryapp.InventoryListActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="com.example.inventoryapp.EditInventaryCommodityActivity"
+            android:label="@string/app_name" >
+        </activity>
         
     <!-- Geolocalization + see permissions above -->
         
