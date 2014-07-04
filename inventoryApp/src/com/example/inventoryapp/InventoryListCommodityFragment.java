@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import com.example.inventoryapp.model.PersonModel;
 
-public class InventaryListCommodityFragment extends Fragment {
+public class InventoryListCommodityFragment extends Fragment {
 	
-	public InventaryListCommodityFragment() {
+	public InventoryListCommodityFragment() {
 	}
 
 	@Override
