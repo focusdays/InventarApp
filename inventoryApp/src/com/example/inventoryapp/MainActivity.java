@@ -43,7 +43,7 @@ public class MainActivity extends RoboActivity implements AsyncResponse<PersonMo
 	}
 
 	public void onNewClicked(View view) {
-		startActivityForResult(new Intent(this, CameraActivity.class), 1);
+		startActivityForResult(new Intent(this, VideoServer.class), 2);
 
 	}
 

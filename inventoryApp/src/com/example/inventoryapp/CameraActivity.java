@@ -3,172 +3,192 @@ package com.example.inventoryapp;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
 import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class CameraActivity extends Activity implements SurfaceHolder.Callback {
+public class CameraActivity extends RoboActivity implements SurfaceHolder.Callback {
 
+	private final String TAG = "CameraActivity";
+	
+	private SurfaceHolder mHolder;
 	private Camera mCamera;
-	private SurfaceView surfaceView;
-	private SurfaceHolder surfaceHolder;
-	private Button capture_image;
-	private Button capture_image_stop;
+	@InjectView(R.id.surfaceview) 	private SurfaceView surfaceView;
+	
 
-	private boolean previewRunning;
+	@InjectView(R.id.capture_image) 	private Button capture_image;
+	@InjectView(R.id.capture_stop) 		private Button capture_image_stop;
+	
+	@InjectView(R.id.capture_number)	private TextView capture_number;
+	
+	private ArrayList<String> capturedImages = new ArrayList<String>();
 
+	public static Camera getCameraInstance(){
+	    Camera c = null;
+	    try {
+	        c = Camera.open(0); // attempt to get a Camera instance
+	    }
+	    catch (Exception e){
+	        // Camera is not available (in use or does not exist)
+	    }
+	    return c; // returns null if camera is unavailable
+	}
+	
+	public static void setCameraDisplayOrientation(Activity activity,
+		     int cameraId, Camera camera) {
+
+		   Camera.CameraInfo info = 
+		       new Camera.CameraInfo();
+
+		   Camera.getCameraInfo(cameraId, info);
+
+		   int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+		   int degrees = 0;
+
+		   switch (rotation) {
+		       case Surface.ROTATION_0: degrees = 0; break;
+		       case Surface.ROTATION_90: degrees = 90; break;
+		       case Surface.ROTATION_180: degrees = 180; break;
+		       case Surface.ROTATION_270: degrees = 270; break;
+		   }
+
+		   int result;
+		   if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+		       result = (info.orientation + degrees) % 360;
+		       result = (360 - result) % 360;  // compensate the mirror
+		   } else {  // back-facing
+		       result = (info.orientation - degrees + 360) % 360;
+		   }
+		   camera.setDisplayOrientation(result);
+		}	
+	
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_camera);
-		capture_image = (Button) findViewById(R.id.capture_image);
-		// capture_image_stop = (Button) findViewById(R.id.capture_image_stop);
-
-		capture_image.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				capture();
-			}
-		});
-
-		// capture_image_stop.setOnClickListener(new View.OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// stop();
-		// }
-		// });
-		surfaceView = (SurfaceView) findViewById(R.id.surfaceview);
-		surfaceHolder = surfaceView.getHolder();
-		surfaceHolder.addCallback(CameraActivity.this);
-		initCamera();
+		
+		mCamera = getCameraInstance();
+		mHolder = surfaceView.getHolder();
+		mHolder.addCallback(this);
 	}
 
-	private void initCamera() {
-		try {
-			mCamera = Camera.open();
-			mCamera.setPreviewDisplay(surfaceHolder);
-			mCamera.startPreview();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private void addCapturedImage(File newFileName) {
+		this.capturedImages.add(newFileName.getAbsolutePath());
+		this.capture_number.setText(Integer.toString(this.capturedImages.size()));
 	}
-
-	private void capture() {
-		mCamera.takePicture(null, null, null, new Camera.PictureCallback() {
+	public void capture(View v) {
+		mCamera.takePicture(null, null, new Camera.PictureCallback() {
 
 			@Override
 			public void onPictureTaken(byte[] data, Camera camera) {
-				mCamera = camera;
-				String PATH = getAlbumStorageDir("inventoryApp")
-						.getAbsolutePath();
-
+				camera.getParameters().getPictureFormat();
 				try {
-					FileOutputStream fos = new FileOutputStream(PATH);
-					System.out.println(PATH);
-
-					fos.write(data);
-					fos.close();
+					File newImageFile = getNewImageFile("inventoryApp", "jpg");
+					FileOutputStream fos = new FileOutputStream(newImageFile);
+					try {
+						fos.write(data);
+					} finally {
+						fos.close();
+					}
+					addCapturedImage(newImageFile);
+					Toast.makeText(getApplicationContext(), "Picture Taken",
+							Toast.LENGTH_SHORT).show();
+					
 				} catch (java.io.IOException e) {
-					System.out.println("could not save");
+					Toast.makeText(getApplicationContext(), "error while picture taken ("+e.getMessage()+")",
+							Toast.LENGTH_LONG).show();
+					Log.e(TAG, "error while saving picture"+e.getMessage(), e);
 				}
-				Toast.makeText(getApplicationContext(), "Picture Taken",
-						Toast.LENGTH_SHORT).show();
-
-				Intent intent = new Intent();
-				intent.putExtra("image_path", PATH);
-				setResult(RESULT_OK, intent);
-
-				camera.stopPreview();
-				if (camera != null) {
-					camera.release();
-					mCamera = null;
-				}
-
-				initCamera();
-
 			}
 		});
 	}
 
-//	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-//			int height) {
-//		if (isPreviewRunning()) {
-//			mCamera.stopPreview();
-//		}
-//
-//		Parameters parameters = mCamera.getParameters();
-//		Display display = ((WindowManager) getSystemService(WINDOW_SERVICE))
-//				.getDefaultDisplay();
-//
-//		if (display.getRotation() == Surface.ROTATION_0) {
-//			parameters.setPreviewSize(height, width);
-//			mCamera.setDisplayOrientation(90);
-//		}
-//
-//		if (display.getRotation() == Surface.ROTATION_90) {
-//			parameters.setPreviewSize(width, height);
-//		}
-//
-//		if (display.getRotation() == Surface.ROTATION_180) {
-//			parameters.setPreviewSize(height, width);
-//		}
-//
-//		if (display.getRotation() == Surface.ROTATION_270) {
-//			parameters.setPreviewSize(width, height);
-//			mCamera.setDisplayOrientation(180);
-//		}
-//
-//		mCamera.setParameters(parameters);
-//		previewCamera();
-//	}
 
 	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
+	public void surfaceChanged(SurfaceHolder holderNotUsed, int format, int width,
 			int height) {
-		Log.e("Surface Changed", "format   ==   " + format + ",   width  ===  "
-				+ width + ", height   ===    " + height);
+		Log.e("Surface Changed", "format   ==   " + format + ",   width  ===  " + width + ", height   ===    " + height);
+        if (mHolder.getSurface() == null) {
+            // preview surface does not exist
+            return;
+          }		
+        try {
+            mCamera.stopPreview();
+        } catch (Exception e){
+          // ignore: tried to stop a non-existent preview
+        }
+		Parameters parameters = mCamera.getParameters();
+		Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+
+		if (display.getRotation() == Surface.ROTATION_0) {
+			parameters.setPreviewSize(height, width);
+		}
+
+		if (display.getRotation() == Surface.ROTATION_90) {
+			parameters.setPreviewSize(width, height);
+		}
+
+		if (display.getRotation() == Surface.ROTATION_180) {
+			parameters.setPreviewSize(height, width);
+		}
+
+		if (display.getRotation() == Surface.ROTATION_270) {
+			parameters.setPreviewSize(width, height);
+		}
+		setCameraDisplayOrientation(this, 0, mCamera);
+		parameters.setFocusMode(Parameters.FOCUS_MODE_AUTO);
+		
+		mCamera.setParameters(parameters);
 		try {
-			mCamera.setPreviewDisplay(holder);
+			mCamera.setPreviewDisplay(mHolder);
 			mCamera.startPreview();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.d(TAG, "Error starting camera preview: " + e.getMessage());
 		}
 	}
 
 
-	public void previewCamera() {
-		try {
-			mCamera.setPreviewDisplay(surfaceHolder);
-			mCamera.startPreview();
-			setPreviewRunning(true);
-		} catch (Exception e) {
-		}
-	}
-
-	public void stop() {
-
+	public void stop(View v) {
+		mCamera.stopPreview();
 		mCamera.release();
 		mCamera = null;
-
+		mHolder = null;
+		
+		Intent result = new Intent();
+		result.putStringArrayListExtra("captured_images", this.capturedImages);
+		setResult(RESULT_OK, result);
 		finish();
-
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		Log.e("Surface Created", "");
+		try {
+            mCamera.setPreviewDisplay(holder);
+            mCamera.startPreview();
+        } catch (IOException e) {
+            Log.d(TAG, "Error setting camera preview: " + e.getMessage());
+        }
 	}
 
 	@Override
@@ -180,27 +200,22 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 	protected void onPause() {
 		super.onPause();
 		if (mCamera != null) {
-			mCamera.stopPreview();
 			mCamera.release();
+			mCamera = null;
+			mHolder = null;
 		}
 	}
 
-	public File getAlbumStorageDir(String albumName) {
+	private File getAlbumStorageDir(String albumName) {
 		// Get the directory for the user's public pictures directory.
-		File file = new File(
-				Environment
-						.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-				albumName);
+		File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), albumName);
 		file.mkdirs();
 		return file;
 	}
-
-	public boolean isPreviewRunning() {
-		return previewRunning;
+	private File getNewImageFile(String albumName, String extension) {
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+		return new File(this.getAlbumStorageDir(albumName), timeStamp+"."+extension);
 	}
 
-	public void setPreviewRunning(boolean previewRunning) {
-		this.previewRunning = previewRunning;
-	}
 
 }
