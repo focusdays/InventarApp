@@ -6,7 +6,6 @@ import org.odata4j.consumer.ODataConsumers;
 import org.odata4j.core.OEntity;
 import org.odata4j.core.ORelatedEntitiesLink;
 import org.odata4j.core.ORelatedEntityLink;
-import org.odata4j.examples.AbstractExample;
 import org.odata4j.format.FormatType;
 
 
@@ -14,7 +13,6 @@ public class JsonGrabbingConsumer extends AbstractExample {
 
 	private static final String ODATA_PRODUCER = "http://inventory42-focusdays14.rhcloud.com/odata.svc";
 	private static JsonGrabbingConsumer INSTANCE = new JsonGrabbingConsumer();
-	
 	
 	private ODataConsumer consumer;
 

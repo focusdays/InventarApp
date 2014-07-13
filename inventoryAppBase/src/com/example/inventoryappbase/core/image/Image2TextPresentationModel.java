@@ -19,6 +19,7 @@ public class Image2TextPresentationModel implements Parcelable {
 	private String keywords;
 	private String similarKeywords;
 	private String fileDir;
+	private int index;
 	
 	public String getFileDir() {
 		return fileDir;
@@ -44,6 +45,7 @@ public class Image2TextPresentationModel implements Parcelable {
 		this.keywords = in.readString();
 		this.similarKeywords = in.readString();
 		this.fileDir = in.readString();
+		this.index = in.readInt();
 	}
 	
 	@Override
@@ -59,6 +61,7 @@ public class Image2TextPresentationModel implements Parcelable {
 		dest.writeString(this.keywords);
 		dest.writeString(this.similarKeywords);
 		dest.writeString(this.fileDir);
+		dest.writeInt(this.index);
 		
 	}
 	public ImageHelper createImage() {
@@ -168,6 +171,14 @@ public class Image2TextPresentationModel implements Parcelable {
 
 	public void setSimilarKeywords(String similarKeywords) {
 		this.similarKeywords = similarKeywords;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 	

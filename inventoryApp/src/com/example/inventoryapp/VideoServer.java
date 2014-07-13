@@ -8,26 +8,33 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.example.inventoryapp.model.CommodityModel;
+import com.example.inventoryapp.model.PersonModel;
+import com.example.inventoryappbase.core.AsyncResponse;
+import com.example.inventoryappbase.core.image.Image2TextAsyncTask;
+import com.example.inventoryappbase.core.image.Image2TextPresentationModel;
+
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.RectF;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
-import android.hardware.Camera.ShutterCallback;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class VideoServer extends RoboActivity implements SurfaceHolder.Callback, AutoFocusCallback {
 	final static String TAG = "Camera";
@@ -36,18 +43,44 @@ public class VideoServer extends RoboActivity implements SurfaceHolder.Callback,
     Camera camera;
     SurfaceHolder surfaceHolder;
     
-	@InjectView(R.id.surfaceview) 		private SurfaceView surfaceView;
+	@InjectView(R.id.surfaceview) 		private DrawableSurfaceView surfaceView;
 	@InjectView(R.id.capture_image) 	private Button capture_image;
 	@InjectView(R.id.capture_stop) 		private Button capture_image_stop;
 	@InjectView(R.id.container) 		private LinearLayout layout;
 	
-	
 	@InjectView(R.id.capture_number)	private TextView capture_number;
-	private ArrayList<String> capturedImages = new ArrayList<String>();
+	@InjectView(R.id.capture_number_title) 	private TextView capture_number_title;
+	
+	private ArrayList<CommodityModel> capturedImages = new ArrayList<CommodityModel>();
+	int detectingImages = 0;
 
 	private void addCapturedImage(File newFileName) {
-		this.capturedImages.add(newFileName.getAbsolutePath());
+		CommodityModel newModel = new CommodityModel();
+		newModel.setCommodityPicture(newFileName.getAbsolutePath());
+		this.capturedImages.add(newModel);
 		this.capture_number.setText(Integer.toString(this.capturedImages.size()));
+	}
+	
+	private int startDetecting() {
+		++detectingImages;
+		capture_number_title.setText(
+				this.getResources().getText(R.string.nof_captured_images_detecting) + " "+detectingImages);
+		capture_image_stop.setEnabled(false);
+		return detectingImages;
+	}
+	private int stopDetecting() {
+		--detectingImages;
+		if (detectingImages == 0) {
+			capture_number_title.setText(R.string.nof_captured_images);
+			capture_image_stop.setEnabled(true);
+		} else {
+			capture_number_title.setText(
+					this.getResources().getText(R.string.nof_captured_images_detecting) + " "+detectingImages);
+		}
+		return detectingImages;
+	}
+	private CommodityModel getCapturedImage(int i) {
+		return capturedImages.get(i);
 	}
 
 	public static void setCameraDisplayOrientation(Activity activity,
@@ -78,7 +111,30 @@ public class VideoServer extends RoboActivity implements SurfaceHolder.Callback,
 		   camera.setDisplayOrientation(result);
 		}	    
     
+	protected void detectPicture(int captureIndex) {
+    	Image2TextPresentationModel model = new Image2TextPresentationModel(this);
+    	model.setImageOriginalFullName(getCapturedImage(captureIndex).getCommodityPicture());
+    	model.setIndex(captureIndex);
+		AsyncResponse<Image2TextPresentationModel, Image2TextPresentationModel> response = new AsyncResponse<Image2TextPresentationModel, Image2TextPresentationModel>() {
+			@Override
+			public void processFinish(Image2TextPresentationModel model) {
+				CommodityModel commodity = getCapturedImage(model.getIndex());
+				commodity.setCommodityTitle(model.getKeywords());
+	            Toast.makeText(getApplicationContext(), "keywords detected: "+model.getKeywords(), Toast.LENGTH_SHORT).show();
+	    		stopDetecting();
+			}
+			@Override
+			public void processTime(long timeInMs) {
+			}
+			@Override
+			public void processProgress(Image2TextPresentationModel model) {
+			}
+		};
+		startDetecting();
+		new Image2TextAsyncTask(this, response, false).execute(model);
+	}
     
+	
     
     /** Called when the activity is first created. */
     @Override
@@ -92,7 +148,8 @@ public class VideoServer extends RoboActivity implements SurfaceHolder.Callback,
             	
             	stop_camera();
         		Intent result = new Intent();
-        		result.putStringArrayListExtra("captured_images", capturedImages);
+        		result.putExtra("newIndexStart", 0);
+        		result.putExtra("newIndexLenght", 0);
         		setResult(RESULT_OK, result);
         		finish();
             }
@@ -105,13 +162,21 @@ public class VideoServer extends RoboActivity implements SurfaceHolder.Callback,
         });
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(this);
-                	  
-        layout.setOnClickListener(new LinearLayout.OnClickListener(){
+        surfaceView.setOnTouchListener(new View.OnTouchListener(){
 
 			   @Override
-			   public void onClick(View arg0) {
-				   capture_image.setEnabled(false);
+			   public boolean onTouch(View view, MotionEvent event) {
+		            if (event.getAction() == MotionEvent.ACTION_DOWN){
+		            	float touchX = event.getX();
+		            	float touchY = event.getY();
+		            	RectF mOriginalRect = new RectF(
+		            			touchX-30, touchY-30, touchX+30, touchY+30);
+		            	surfaceView.setDrawableRect(mOriginalRect);
+		            	surfaceView.invalidate();
+		            }
+//				   capture_image.setEnabled(false);
 				   camera.autoFocus(VideoServer.this);
+		           return false;
 			   }
         });
 
@@ -119,7 +184,9 @@ public class VideoServer extends RoboActivity implements SurfaceHolder.Callback,
     
 	@Override
 	public void onAutoFocus(boolean success, Camera camera) {
-		if (success) capture_image.setEnabled(true);
+		if (success) {
+//			capture_image.setEnabled(true);
+		}
 	}
 
 
@@ -139,25 +206,27 @@ public class VideoServer extends RoboActivity implements SurfaceHolder.Callback,
             public void onPictureTaken(byte[] data, Camera camera) {
                 FileOutputStream outStream = null;
                 try {
+                	int index = capturedImages.size();
                 	File newImageFile = getNewImageFile("inventoryApp", "jpg");
                     outStream = new FileOutputStream(newImageFile);
                     try {
 	                    outStream.write(data);
-	                    addCapturedImage(newImageFile);
-	                    Log.d(TAG, "onPictureTaken - wrote bytes: " + data.length);
                     } finally {
                     	outStream.close();
                     }
+                    addCapturedImage(newImageFile);
+                    Log.d(TAG, "onPictureTaken - wrote bytes: " + data.length);
+                    detectPicture(index);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 Log.d(TAG, "onPictureTaken - jpeg");
+              stop_camera();
+              start_camera();
             }
         });
-        stop_camera();
-        start_camera();
     }
 
     private void start_camera()
@@ -211,6 +280,7 @@ public class VideoServer extends RoboActivity implements SurfaceHolder.Callback,
           Camera.Parameters param;
           param = camera.getParameters();
           param.setFocusMode(Parameters.FOCUS_MODE_AUTO);
+          param.setFlashMode(Parameters.FLASH_MODE_AUTO);
           setCameraDisplayOrientation(this, 0, camera);
 
           // start preview with new settings

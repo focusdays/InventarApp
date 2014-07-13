@@ -1,5 +1,6 @@
 package com.example.inventoryapp.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ public class PersonModel extends AbstractModel {
 	
 	private String personName;
 	private String personId;
+	private BigDecimal totalPriceInventories;
 	
 	private List<InventoryModel> inventoryList =  new ArrayList<InventoryModel>();
 	private LocationModel location;
@@ -57,6 +59,14 @@ public class PersonModel extends AbstractModel {
 
 	public void setLocation(LocationModel location) {
 		this.location = location;
+	}
+
+	public BigDecimal getTotalPriceInventories() {
+		return totalPriceInventories;
+	}
+
+	public void setTotalPriceInventories(BigDecimal totalPriceInventories) {
+		this.totalPriceInventories = totalPriceInventories;
 	}
 
 	

@@ -5,13 +5,17 @@ public class CommodityModel extends AbstractModel {
 	
 	private static int lastId = 0;
 
-	private int commodityId;
+	private int commodityId = ++lastId;
 	private String commodityTitle;
-	private CommodityType commodityType;
-	private int commodityPrice;
+	private CommodityType commodityType = CommodityType.NichtDefiniert;
+	private int commodityPrice = 0;
 	private String commodityPicture;
 	
 	
+	public CommodityModel() {
+		super();
+		
+	}
 	
 	public CommodityModel(String commodityTitle, CommodityType commodityType, int commodityPrice, String commodityPicture) {
 		super();
@@ -19,7 +23,6 @@ public class CommodityModel extends AbstractModel {
 		this.commodityType = commodityType;
 		this.commodityPrice = commodityPrice;
 		this.commodityPicture = commodityPicture;
-		this.commodityId = ++lastId;
 	}
 	
 	

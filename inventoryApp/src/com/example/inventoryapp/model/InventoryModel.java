@@ -30,5 +30,9 @@ public class InventoryModel extends AbstractModel {
 		this.inventoryCommodities = inventoryCommodities;
 	}
 	
-
+	public CommodityModel addCommodity(CommodityModel model) {
+		this.getInventoryCommodities().add(model);
+		return model;
+	}
+ 
 }

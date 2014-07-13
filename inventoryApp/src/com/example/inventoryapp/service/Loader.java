@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.example.inventoryappbase.core.AsyncResponse;
 
-public class Loader<T> implements ILoader {
+public class Loader<T> implements ILoader<T> {
 
 	private Activity activity;
 	private AsyncResponse<T, Void> callback;

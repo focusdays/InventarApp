@@ -2,11 +2,11 @@ package com.example.inventoryapp.service;
 
 import java.util.concurrent.ExecutionException;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
-import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.example.inventoryapp.model.LocationModel;
@@ -26,18 +26,33 @@ public class PersonLoader extends Loader<PersonModel> implements ConnectionCallb
 		super(activity, callback);
 	}
 
-	public void loadCurrentPerson() {
-		Cursor c = this.getActivity().getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
-		try {
-			c.moveToFirst();
-//			person.setPersonId(c.getString(c.getColumnIndex(ContactsContract.Contacts._ID)));
-//			person.setPersonName(c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-			new PersonLoaderAsyncTask(this.getCallback()).execute("max@muster.ch");
-//			this.getLocation(activity, person);
-		} finally {
-			c.close();
+	public String getGoogleEmail() {
+		AccountManager accountManager = AccountManager.get(this.getActivity());
+		Account[] accounts = accountManager.getAccountsByType("com.google");
+		for (Account account : accounts) {
+			if (account.name != null && account.name.contains("@")) {
+				return account.name;
+			}
 		}
+		return "max@muster.ch";
 	}
+//	public void loadCurrentPerson() {
+//		Cursor c = this.getActivity().getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
+//		try {
+//			c.moveToFirst();
+////			person.setPersonId(c.getString(c.getColumnIndex(ContactsContract.Contacts._ID)));
+////			person.setPersonName(c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+//			new PersonLoaderAsyncTask(this.getCallback()).execute("max@muster.ch");
+////			this.getLocation(activity, person);
+//		} finally {
+//			c.close();
+//		}
+//	}
+
+	public void loadCurrentPerson() {
+		new PersonLoaderAsyncTask(this.getCallback()).execute(this.getGoogleEmail());
+}
+	
 	
 	
 

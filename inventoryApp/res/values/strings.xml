@@ -9,6 +9,7 @@
     <string name="loadImage">image laden</string>
     <string name="capture">Capture</string>
     <string name="nof_captured_images">images</string>
+    <string name="nof_captured_images_detecting">images (detecting)</string>
     <string name="capture_done">Done</string>
     <string name="capture_start">Start</string>
 </resources>

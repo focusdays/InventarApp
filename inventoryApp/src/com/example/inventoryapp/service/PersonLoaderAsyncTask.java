@@ -1,5 +1,7 @@
 package com.example.inventoryapp.service;
 
+import java.math.BigDecimal;
+
 import org.core4j.Enumerable;
 import org.odata4j.core.OEntity;
 
@@ -25,8 +27,8 @@ public class PersonLoaderAsyncTask extends AsyncTask<String, Void, PersonModel> 
 	    }
 		OEntity personEntity = JsonGrabbingConsumer.getInstance().getPerson(personId[0]);
 		PersonModel person = this.mapPerson(personEntity);
-//		this.mapLocation(person, JsonGrabbingConsumer.getInstance().getLocation(personEntity));
-//		this.mapInventories(person, JsonGrabbingConsumer.getInstance().getInventories(personEntity));
+		this.mapLocation(person, JsonGrabbingConsumer.getInstance().getLocation(personEntity));
+		this.mapInventories(person, JsonGrabbingConsumer.getInstance().getInventories(personEntity));
 //		this.mapCommodities(person, JsonGrabbingConsumer.getInstance().getCommodities(personEntity));
 		
 		return person;
@@ -45,14 +47,35 @@ public class PersonLoaderAsyncTask extends AsyncTask<String, Void, PersonModel> 
 	protected PersonModel mapPerson(OEntity personEntity) {
 		PersonModel person = PersonModel.getPersonInstance();
 		person.setPersonName(this.getString(personEntity, "personName"));
+		person.setPersonId(this.getString(personEntity, "personID"));
+		person.setTotalPriceInventories(this.getBigDecimal(personEntity, "totalPriceInventories"));
 		return person;
 
 	}
 	private String getString(OEntity entity, String attr) {
 		return (String)entity.getProperty(attr).getValue();
 	}
-	private Double getDouble(OEntity entity, String attr) {
-		return Double.parseDouble(this.getString(entity, attr));
+	private BigDecimal getBigDecimal(OEntity entity, String attr) {
+		return (BigDecimal)entity.getProperty(attr).getValue();
+	}
+	private Integer getInteger(OEntity entity, String attr) {
+		return (Integer)entity.getProperty(attr).getValue();
+	}
+	private int getInt(OEntity entity, String attr) {
+		Integer i = this.getInteger(entity, attr);
+		if (i == null) {
+			return 0;
+		} else {
+			return i.intValue();
+		}
+	}
+	private double getDouble(OEntity entity, String attr) {
+		BigDecimal bigDecimal = this.getBigDecimal(entity, attr);
+		if (bigDecimal == null) {
+			return 0.0;
+		} else {
+			return bigDecimal.doubleValue();
+		}
 	}
 	protected PersonModel mapLocation(PersonModel person, OEntity locationEntity) {
 		person.setLocation(new LocationModel(person));
@@ -66,6 +89,10 @@ public class PersonLoaderAsyncTask extends AsyncTask<String, Void, PersonModel> 
 		return person;
 	}
 	protected PersonModel mapInventories(PersonModel person, Enumerable<OEntity> inventories ) {
+		for (OEntity oEntity : inventories) {
+			InventoryModel inventory = new InventoryModel();
+			inventory.setInventoryId(this.getInt(oEntity, "inventoryID"));
+		}
 		return person;
 	}
 	protected PersonModel mapCommodities(PersonModel person, InventoryModel inventory, Enumerable<OEntity> commodities) {
