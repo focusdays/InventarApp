@@ -195,8 +195,21 @@ public class ODataConsumerInventory {
 	 * @param person
 	 */
 	public void modifyPersonHierarchy (Person person) {
-		
 		OEntity personEntity = this.getOEntity("Person", person.getPersonID()); 
+		
+		if (person.isCreated() && person.isUpdated()) {
+			System.out.println("Kann Person " + person.getPersonID() + " nicht gleichzeitig anlegen und aendern!");
+		
+		} else if (person.isCreated()) { // TODO: der spinnt noch
+			createPersonEntity(personEntity, person);
+			System.out.println("Person " + person.getPersonID() + " wurde angelegt");
+			
+		} else if (person.isUpdated()) {
+			updatePersonEntity(personEntity, person);
+			System.out.println("Person " + person.getPersonID() + " wurde upgedated");
+		
+		} 
+			
 		
 		List<Device> devices = person.getDevices();
 		if (devices != null && devices.size() > 0) {
@@ -252,8 +265,9 @@ public class ODataConsumerInventory {
 				if (inventory.isCreated() && inventory.isUpdated()) {
 					System.out.println("Kann Inventory " + inventory.getInventoryTitle() + " fuer Person " + person.getPersonID() + " nicht gleichzeitig anlegen und aendern!");
 				
-				} else if (inventory.isCreated()) {
-					createInventoryEntity(personEntity, inventory);
+				} else if (inventory.isCreated()) { 
+					OEntity locationEntity = this.getOEntity("Location", person.getLocations().get(0).getLocationID());
+					createInventoryEntity(personEntity, locationEntity, inventory);
 					System.out.println("Inventory " + inventory.getInventoryTitle() + " fuer Person " + person.getPersonID() + " wurde angelegt");
 					
 				} else if (inventory.isUpdated()) {
@@ -272,8 +286,9 @@ public class ODataConsumerInventory {
 						if (commodity.isCreated() && commodity.isUpdated()) {
 							System.out.println("Kann Commodity " + commodity.getCommodityTitle() + " fuer Person " + person.getPersonID() + " nicht gleichzeitig anlegen und aendern!");
 						
-						} else if (commodity.isCreated()) {
-							createCommodityEntity(personEntity, commodity);
+						} else if (commodity.isCreated()) { 
+							OEntity inventoryEntity = this.getOEntity("Inventory", inventory.getInventoryID());
+							createCommodityEntity(inventoryEntity, commodity);
 							System.out.println("Commodity " + commodity.getCommodityTitle() + " fuer Person " + person.getPersonID() + " wurde angelegt");
 							
 						} else if (commodity.isUpdated()) {
@@ -295,6 +310,32 @@ public class ODataConsumerInventory {
 		}
 	}
 	
+	
+	/**
+	 * 
+	 * @param personEntity
+	 * @param person
+	 */
+	private void createPersonEntity(OEntity personEntity, Person person) {
+		this.getConsumer().createEntity("Person")
+		        .properties(OProperties.string("personID", person.getPersonID()))
+		        .properties(OProperties.string("personName", person.getPersonName()))
+		        .properties(OProperties.decimal("totalPriceInventories", person.getTotalPriceInventories()))
+		        	.execute();
+	}
+	
+	/**
+	 * 
+	 * @param personEntity
+	 * @param person
+	 */
+	private void updatePersonEntity(OEntity personEntity, Person person) {
+		this.getConsumer().mergeEntity(personEntity)
+		        .properties(OProperties.string("personID", person.getPersonID()))
+		        .properties(OProperties.string("personName", person.getPersonName()))
+		        .properties(OProperties.decimal("totalPriceInventories", person.getTotalPriceInventories()))
+		        	.execute();
+	}
 	
 	/**
 	 * 
@@ -331,8 +372,7 @@ public class ODataConsumerInventory {
 	 */
 	private void createLocationEntity(OEntity personEntity, Location location) {
 		Integer locationCounter = Integer.valueOf(this.getConsumer().getEntitiesCount("Location").execute() + 1);
-		this.getConsumer().createEntity("Device")
-		        .link("person", personEntity)
+		this.getConsumer().createEntity("Location")
 		        .properties(OProperties.int32("locationID", locationCounter))
 		        .properties(OProperties.string("locationTitle", location.getLocationTitle()))
 		        .properties(OProperties.int32("locationType", location.getLocationType()))
@@ -367,12 +407,14 @@ public class ODataConsumerInventory {
 	/**
 	 * 
 	 * @param personEntity
+	 * @param locationEntity
 	 * @param inventory
 	 */
-	private void createInventoryEntity(OEntity personEntity, Inventory inventory) {
+	private void createInventoryEntity(OEntity personEntity, OEntity locationEntity, Inventory inventory) {
 		Integer inventoryCounter = Integer.valueOf(this.getConsumer().getEntitiesCount("Inventory").execute() + 1);
 		this.getConsumer().createEntity("Inventory")
 		        .link("person", personEntity)
+		        .link("location", locationEntity)
 		        .properties(OProperties.int32("inventoryID", inventoryCounter))
 		        .properties(OProperties.string("inventoryTitle", inventory.getInventoryTitle()))
 		        .properties(OProperties.int32("inventoryType", inventory.getInventoryType()))
