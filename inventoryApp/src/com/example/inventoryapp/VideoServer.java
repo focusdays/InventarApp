@@ -8,12 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.example.inventoryapp.model.CommodityModel;
-import com.example.inventoryapp.model.PersonModel;
-import com.example.inventoryappbase.core.AsyncResponse;
-import com.example.inventoryappbase.core.image.Image2TextAsyncTask;
-import com.example.inventoryappbase.core.image.Image2TextPresentationModel;
-
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.app.Activity;
@@ -35,6 +29,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.inventoryapp.model.CommodityModel;
+import com.example.inventoryappbase.core.AsyncResponse;
+import com.example.inventoryappbase.core.image.Image2TextAsyncTask;
+import com.example.inventoryappbase.core.image.Image2TextPresentationModel;
 
 public class VideoServer extends RoboActivity implements SurfaceHolder.Callback, AutoFocusCallback {
 	final static String TAG = "Camera";

@@ -14,8 +14,6 @@ import com.example.inventoryapp.model.InventoryModel;
 import com.example.inventoryapp.model.PersonModel;
 import com.example.inventoryapp.service.PersonLoader;
 import com.example.inventoryappbase.core.AsyncResponse;
-import com.example.inventoryappbase.core.image.Image2TextAsyncTask;
-import com.example.inventoryappbase.core.image.Image2TextPresentationModel;
 import com.example.inventoryappbase.core.location.SimpleAddress;
 
 public class MainActivity extends RoboActivity implements AsyncResponse<PersonModel, Void> {
