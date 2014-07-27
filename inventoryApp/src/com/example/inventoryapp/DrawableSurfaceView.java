@@ -7,9 +7,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.SurfaceView;
-
 public class DrawableSurfaceView extends SurfaceView {
 
 	private RectF mOriginalRect;
