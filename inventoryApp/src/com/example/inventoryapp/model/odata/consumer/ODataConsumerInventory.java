@@ -15,7 +15,7 @@ import org.odata4j.format.FormatType;
 import com.example.inventoryapp.model.odata.Commodity;
 import com.example.inventoryapp.model.odata.Device;
 import com.example.inventoryapp.model.odata.Inventory;
-import com.example.inventoryapp.model.odata.Location;
+import com.example.inventoryapp.model.odata.LocationAddress;
 import com.example.inventoryapp.model.odata.Person;
 
 /**
@@ -31,6 +31,8 @@ public class ODataConsumerInventory {
 	
 	private ODataConsumer consumer;
 	private OEntityModelMapper oEntityModelMapper;
+	private Person person;
+	private String personId;
 
 	public static ODataConsumerInventory getInstance() {
 		return INSTANCE;
@@ -138,6 +140,7 @@ public class ODataConsumerInventory {
 	 * @return
 	 */
 	public Person getPersonHierarchy (String personId) {
+		if (this.getPerson() != null) return this.getPerson();
 		
 		OEntity personEntity = this.getOEntity("Person", personId);
 		Person person = oEntityModelMapper.mapEntityToPersonModel(personEntity);
@@ -146,7 +149,7 @@ public class ODataConsumerInventory {
 		List<Device> devices = new ArrayList<Device>();
 		
 		List<OEntity> locationEntities = getRelatedOEntitiesByIntId(personEntity, "locations", "Location");
-		List<Location> locations = new ArrayList<Location>();
+		List<LocationAddress> locations = new ArrayList<LocationAddress>();
 		
 		List<OEntity> inventoryEntities = getRelatedOEntitiesByIntId(personEntity, "inventories", "Inventory");
 		List<Inventory> inventories = new ArrayList<Inventory>();
@@ -160,7 +163,7 @@ public class ODataConsumerInventory {
 		person.setDevices(devices);
 		
 		for(OEntity locationEntity : locationEntities) {
-			Location location = oEntityModelMapper.mapEntityToLocationModel(locationEntity);
+			LocationAddress location = oEntityModelMapper.mapEntityToLocationModel(locationEntity);
 			if (location != null) {
 				locations.add(location);
 			}
@@ -195,6 +198,8 @@ public class ODataConsumerInventory {
 	 * @param person
 	 */
 	public void modifyPersonHierarchy (Person person) {
+		this.setPerson(null);
+		
 		OEntity personEntity = this.getOEntity("Person", person.getPersonID()); 
 		
 		if (person.isCreated() && person.isUpdated()) {
@@ -235,9 +240,9 @@ public class ODataConsumerInventory {
 			System.out.println("KEINE Devices fuer Person " + person.getPersonID() + " gefunden!");
 		}
 		
-		List<Location> locations = person.getLocations();
+		List<LocationAddress> locations = person.getLocations();
 		if (locations != null && locations.size() > 0) {
-			for(Location location : locations) {
+			for(LocationAddress location : locations) {
 				if (location.isCreated() && location.isUpdated()) {
 					System.out.println("Kann Location " + location.getLocationTitle() + " fuer Person " + person.getPersonID() + " nicht gleichzeitig anlegen und aendern!");
 				
@@ -370,7 +375,7 @@ public class ODataConsumerInventory {
 	 * @param personEntity
 	 * @param location
 	 */
-	private void createLocationEntity(OEntity personEntity, Location location) {
+	private void createLocationEntity(OEntity personEntity, LocationAddress location) {
 		Integer locationCounter = Integer.valueOf(this.getConsumer().getEntitiesCount("Location").execute() + 1);
 		this.getConsumer().createEntity("Location")
 		        .properties(OProperties.int32("locationID", locationCounter))
@@ -390,7 +395,7 @@ public class ODataConsumerInventory {
 	 * @param locationEntity
 	 * @param location
 	 */
-	private void updateLocationEntity(OEntity locationEntity, Location location) {
+	private void updateLocationEntity(OEntity locationEntity, LocationAddress location) {
 		this.getConsumer().mergeEntity(locationEntity)
     			.properties(OProperties.int32("locationID", location.getLocationID()))
 		        .properties(OProperties.string("locationTitle", location.getLocationTitle()))
@@ -476,5 +481,21 @@ public class ODataConsumerInventory {
 		        .properties(OProperties.datetime("mutationTimestamp", commodity.getMutationTimestamp()))
 		        .properties(OProperties.decimal("commodityPrice",commodity.getCommodityPrice()))
 		        	.execute();
+	}
+
+	public String getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(String personId) {
+		this.personId = personId;
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 }

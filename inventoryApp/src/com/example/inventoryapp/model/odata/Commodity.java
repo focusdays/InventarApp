@@ -5,26 +5,70 @@ import java.math.BigDecimal;
 
 import org.joda.time.LocalDateTime;
 
+import android.os.Parcel;
 
-public class Commodity  {
+
+public class Commodity  extends AbstractModel {
 	
-	private Integer commodityId;
+	private static int MAX = 14;
+	
+	private Integer commodityId = ++MAX;
 	private String commodityTitle;
-	private Integer commodityType;
-	private Integer roomType;
-	private BigDecimal commodityPrice;
+	private Integer commodityType = 3;
+	private Integer roomType = 1;
+	private BigDecimal commodityPrice = new BigDecimal(10);
 	private String commodityPicture;
-	private LocalDateTime mutationTimestamp;
-	
-	private boolean created;
-	private boolean updated;
-	private boolean deleted;
+	private LocalDateTime mutationTimestamp = LocalDateTime.now();
 	
 	private Inventory inventory;
 
 	public Commodity() {
+		super();
 	}
 
+	public Commodity(Parcel source) {
+		super(source);
+		this.commodityId = (Integer)source.readValue(null);
+		this.commodityTitle = (String)source.readValue(null);
+		this.commodityType = (Integer)source.readValue(null);
+		this.roomType = (Integer)source.readValue(null);
+		this.commodityPrice = new BigDecimal(source.readString());
+		this.commodityPicture = (String)source.readValue(null);;
+		this.mutationTimestamp = LocalDateTime.parse(source.readString());
+		/*
+		private Integer commodityId;
+		private String commodityTitle;
+		private Integer commodityType;
+		private Integer roomType;
+		private BigDecimal commodityPrice;
+		private String commodityPicture;
+		private LocalDateTime mutationTimestamp;
+		 */
+	}
+
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		super.writeToParcel(dest, flags);
+		/*
+		private Integer commodityId;
+		private String commodityTitle;
+		private Integer commodityType;
+		private Integer roomType;
+		private BigDecimal commodityPrice;
+		private String commodityPicture;
+		private LocalDateTime mutationTimestamp;
+		 */
+		dest.writeValue(this.commodityId);
+		dest.writeValue(this.commodityTitle);
+		dest.writeValue(this.commodityType);
+		dest.writeValue(this.roomType);
+		dest.writeString(this.commodityPrice.toString());
+		dest.writeValue(this.commodityPicture);
+		dest.writeString(this.mutationTimestamp.toString());
+	}
+		
+	
 	public Integer getCommodityId() {
 		return commodityId;
 	}
@@ -89,28 +133,20 @@ public class Commodity  {
 		this.inventory = inventory;
 	}
 
-	public boolean isCreated() {
-		return created;
+	@Override
+	public int describeContents() {
+		return 0;
 	}
 
-	public void setCreated(boolean created) {
-		this.created = created;
-	}
 
-	public boolean isUpdated() {
-		return updated;
-	}
+    public static final Creator<Commodity> CREATOR = new Creator<Commodity>() {
+        public Commodity createFromParcel(Parcel source) {
+            return new Commodity(source);
+        }
 
-	public void setUpdated(boolean updated) {
-		this.updated = updated;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
+        public Commodity[] newArray(int size) {
+            return new Commodity[size];
+        }
+    };
 	
 }

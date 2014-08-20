@@ -7,7 +7,7 @@ import java.util.List;
 import org.joda.time.LocalDateTime;
 
 
-public class Inventory  {
+public class Inventory extends AbstractModel {
 	
 	private Integer inventoryID;
 	private Integer currency;
@@ -18,11 +18,8 @@ public class Inventory  {
 	private LocalDateTime mutationTimestamp;
 	private List<Commodity> commodities;
 	private Person person;	
-	private Location location;
+	private LocationAddress location;
 	
-	private boolean created;
-	private boolean updated;
-	private boolean deleted;
 	
 		
 	public Inventory() {
@@ -61,6 +58,15 @@ public class Inventory  {
 
 	public BigDecimal getInventoryTotalPrice() {
 		return inventoryTotalPrice;
+	}
+	
+	public void updateInventoryTotalPrice() {
+		BigDecimal total = new BigDecimal(0);
+		for (Commodity commodity : this.getCommodities()) {
+			if (commodity.getCommodityPrice() != null) total.add(commodity.getCommodityPrice());
+		}
+		this.setInventoryTotalPrice(total);
+		this.setUpdated(true);
 	}
 
 
@@ -119,43 +125,20 @@ public class Inventory  {
 	}
 
 
-	public Location getLocation() {
+	public LocationAddress getLocation() {
 		return location;
 	}
 
 
-	public void setLocation(Location location) {
+	public void setLocation(LocationAddress location) {
 		this.location = location;
 	}
 
 
-	public boolean isCreated() {
-		return created;
-	}
-
-
-	public void setCreated(boolean created) {
-		this.created = created;
-	}
-
-
-	public boolean isUpdated() {
-		return updated;
-	}
-
-
-	public void setUpdated(boolean updated) {
-		this.updated = updated;
-	}
-
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
+	public Commodity addCommodity(Commodity commodity) {
+		this.getCommodities().add(commodity);
+		commodity.setInventory(this);
+		return commodity;
 	}
 
 

@@ -1,85 +1,136 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@android:id/list"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/textTitel"
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:text="47&apos;000 CHF / 120&apos;300 CHF"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/labelPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/top_priceLabel"
-        android:text="Price"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="bold" />
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="4" >
 
-    <TextView
-        android:id="@+id/labelType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/top_typeLabel"
-        android:text="Type"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/textTitel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100&apos;112 CHF"
+                android:textStyle="bold" />
+        </TableRow>
 
-    <TextView
-        android:id="@+id/labelName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/top_nameLabel"
-        android:text="Name"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="bold" />
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-    <EditText
-        android:id="@+id/textPrice"
-        android:layout_width="212dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="@dimen/top_priceText"
-        android:ems="10"
-        android:text="kjhgsdjf" >
+            <TextView
+                android:id="@+id/labelPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price" />
 
-        <requestFocus />
-    </EditText>
+            <ImageButton
+                android:id="@+id/btnSpeakPrice"
+                style="@style/AppTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/speak"
+                android:src="@android:drawable/ic_btn_speak_now" />
 
-    <EditText
-        android:id="@+id/textType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="@dimen/top_typeText"
-        android:ems="10"
-        android:text="gfjh" />
+            <EditText
+                android:id="@+id/textPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="kjhgsdjf" />
 
-    <EditText
-        android:id="@+id/textName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="@dimen/top_nameText"
-        android:ems="10"
-        android:text="gdfg" />
+            <ImageButton
+                android:id="@+id/btnListenPrice"
+                style="@style/AppTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/listen"
+                android:src="@drawable/ic_action_volume_on" />
+        </TableRow>
 
-    <ImageSwitcher
-        android:id="@+id/imageSwitcher1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/imageSwitcher_bottom"
-        android:layout_marginLeft="@dimen/imageSwitcher_left"
-        android:layout_marginRight="@dimen/imageSwitcher_left"
-        android:layout_marginTop="@dimen/imageSwitcher_top"
-        android:paddingRight="@dimen/imageSwitcher_left" >
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="fill_horizontal" >
 
-    </ImageSwitcher>
+            <TextView
+                android:id="@+id/labelName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name" />
 
-</FrameLayout>
+            <ImageButton
+                android:id="@+id/btnSpeakName"
+                style="@style/AppTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/speak"
+                android:src="@android:drawable/ic_btn_speak_now" />
+
+            <EditText
+                android:id="@+id/textName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="gdfg" />
+
+            <ImageButton
+                android:id="@+id/btnListenName"
+                style="@style/AppTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/listen"
+                android:src="@drawable/ic_action_volume_on" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/labelType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type" />
+
+            <EditText
+                android:id="@+id/textType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="3"
+                android:text="EditText" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/imageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Picture" />
+
+            <ImageView
+                android:id="@+id/imagePreview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_span="3"
+                android:contentDescription="@string/capturedImage" />
+        </TableRow>
+    </TableLayout>
+
+</ScrollView>

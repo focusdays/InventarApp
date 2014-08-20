@@ -16,15 +16,18 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.inventoryapp.model.CommodityModel;
-import com.example.inventoryapp.model.PersonModel;
+import com.example.inventoryapp.model.odata.Commodity;
+import com.example.inventoryapp.model.odata.Inventory;
+import com.example.inventoryapp.model.odata.Person;
+import com.example.inventoryapp.model.odata.consumer.ODataConsumerInventory;
 
 public class InventoryListActivity extends RoboActivity {
 
 	@InjectView(R.id.commodityList)
 	private ListView commoditiesView;
 
-	List<CommodityModel> commodities;
+	List<Commodity> commodities;
+	Inventory inventory;
 	
 	InventoryListActivity me;
 
@@ -32,12 +35,10 @@ public class InventoryListActivity extends RoboActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.inventory_list_main);
-
-		commodities = PersonModel.getPersonInstance().getInventaryList().get(0)
-				.getInventoryCommodities();
+		inventory = ODataConsumerInventory.getInstance().getPerson().getInventory();
+		commodities = inventory.getCommodities();
 
 		commoditiesView.setAdapter(new InventoryListAdapter());
-		
 		me = this;
 		
 		
@@ -75,13 +76,12 @@ public class InventoryListActivity extends RoboActivity {
 						false);
 			}
 
-			CommodityModel commodityModel = commodities.get(index);
+			Commodity commodityModel = commodities.get(index);
 
-			TextView idView = (TextView) rowView.findViewById(R.id.commodityId);
-			TextView titleView = (TextView) rowView
-					.findViewById(R.id.commodityTitle);
-			TextView priceView = (TextView) rowView
-					.findViewById(R.id.commodityPrice);
+			TextView idView =    (TextView) rowView.findViewById(R.id.commodityId);
+			TextView titleView = (TextView) rowView.findViewById(R.id.commodityTitle);
+			TextView priceView = (TextView) rowView.findViewById(R.id.commodityPrice);
+			
 			idView.setText("" + commodityModel.getCommodityId());
 			titleView.setText(commodityModel.getCommodityTitle());
 			priceView.setText("" + commodityModel.getCommodityPrice());

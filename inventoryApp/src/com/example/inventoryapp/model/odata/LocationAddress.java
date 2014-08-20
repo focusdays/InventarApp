@@ -3,8 +3,10 @@ package com.example.inventoryapp.model.odata;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.example.inventoryappbase.core.location.SimpleAddress;
 
-public class Location  {
+
+public class LocationAddress extends AbstractModel {
 	private Integer locationID;
 	private String locationTitle;
 	private Integer locationType;
@@ -16,13 +18,11 @@ public class Location  {
 	private String locationAddress_streetHouseNr;
 	private List<Inventory> inventories;
 	private Person person;
-	
-	private boolean created;
-	private boolean updated;
-	private boolean deleted;
+	private transient SimpleAddress address;
 	
 	
-	public Location() {
+	
+	public LocationAddress() {
 	}
 
 	public Integer getLocationID() {
@@ -115,29 +115,24 @@ public class Location  {
 		this.person = person;
 	}
 
-	public boolean isCreated() {
-		return created;
+	public SimpleAddress getAddress() {
+		return address;
 	}
 
-	public void setCreated(boolean created) {
-		this.created = created;
+	public void updateAddress(SimpleAddress address) {
+		this.setAddress(address);
+		this.setGeoLocation_latitude(new BigDecimal(address.getPosition().latitude));
+		this.setGeoLocation_longitude(new BigDecimal(address.getPosition().longitude));
+		this.setLocationAddress_land(address.getCountry());
+		this.setLocationAddress_postalCodeCity(address.getZip()+" "+address.getCity());
+		this.setLocationAddress_streetHouseNr(address.getAddress());
+		this.setUpdated(true);
+	}
+	
+	public void setAddress(SimpleAddress address) {
+		this.address = address;
 	}
 
-	public boolean isUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(boolean updated) {
-		this.updated = updated;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
 
 	
 

@@ -8,8 +8,10 @@ import org.odata4j.core.OEntity;
 import com.example.inventoryapp.model.odata.Commodity;
 import com.example.inventoryapp.model.odata.Device;
 import com.example.inventoryapp.model.odata.Inventory;
-import com.example.inventoryapp.model.odata.Location;
+import com.example.inventoryapp.model.odata.LocationAddress;
 import com.example.inventoryapp.model.odata.Person;
+import com.example.inventoryappbase.core.location.SimpleAddress;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Mappt OEntity Objekte des OData Producers mit den Presentation Objekten der App.
@@ -64,9 +66,9 @@ public class OEntityModelMapper {
 	 * @param locationEntity
 	 * @return
 	 */
-	public Location mapEntityToLocationModel (OEntity locationEntity) {
+	public LocationAddress mapEntityToLocationModel (OEntity locationEntity) {
 		if (locationEntity != null) {
-			Location location = new Location();
+			LocationAddress location = new LocationAddress();
 			location.setLocationID(locationEntity.getProperty("locationID", Integer.class).getValue());
 			location.setLocationTitle(locationEntity.getProperty("locationTitle", String.class).getValue());
 			location.setLocationType(locationEntity.getProperty("locationType", Integer.class).getValue());
@@ -76,11 +78,31 @@ public class OEntityModelMapper {
 			location.setLocationAddress_land(locationEntity.getProperty("locationAddress_land", String.class).getValue());
 			location.setLocationAddress_postalCodeCity(locationEntity.getProperty("locationAddress_postalCodeCity", String.class).getValue());
 			location.setLocationAddress_streetHouseNr(locationEntity.getProperty("locationAddress_streetHouseNr", String.class).getValue());
+			SimpleAddress address = new SimpleAddress();
+			address.setAddress(location.getLocationAddress_streetHouseNr());
+			String zipCity = location.getLocationAddress_postalCodeCity();
+			if (zipCity.contains(" ")) {
+				String[] zipCitySplit = zipCity.split(" ");
+				address.setZip(zipCitySplit[0]);
+				address.setCity(zipCitySplit[1]);
+			} else {
+				address.setZip("");
+				address.setCity(location.getLocationAddress_postalCodeCity());
+			}
+			address.setPosition(new LatLng(
+					asDouble(location.getGeoLocation_latitude()), 
+					asDouble(location.getGeoLocation_longitude())));
+			location.setAddress(address);
+			
 			return location;
 		
 		} else {
 			return null;
 		}
+	}
+	
+	protected Double asDouble(BigDecimal d) {
+		return Double.valueOf(d.doubleValue());
 	}
 	
 	

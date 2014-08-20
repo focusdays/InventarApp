@@ -78,7 +78,7 @@ public class GetAddressAsyncTask extends AsyncTask<LatLng, Void, AddressResult> 
                 Address address = addresses.get(0);
 
                 String mAddress = address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "";
-                String mCity= address.getLocality();
+                String mCity= address.getLocality() == null ? address.getSubLocality() : address.getLocality();
                 String mZip = address.getPostalCode();
                 String mCountry = address.getCountryName();
                 SimpleAddress simple = new SimpleAddress(latLng, mAddress, mZip, mCity, mCountry);

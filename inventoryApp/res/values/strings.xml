@@ -12,4 +12,7 @@
     <string name="nof_captured_images_detecting">images (detecting)</string>
     <string name="capture_done">Done</string>
     <string name="capture_start">Start</string>
+    <string name="speak">speak</string>
+    <string name="updateLocation">Update current location</string>
+    <string name="listen">Listen...</string>
 </resources>

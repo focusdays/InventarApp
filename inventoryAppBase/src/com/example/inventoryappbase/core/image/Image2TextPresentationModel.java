@@ -2,6 +2,8 @@ package com.example.inventoryappbase.core.image;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import android.content.Context;
@@ -16,18 +18,15 @@ public class Image2TextPresentationModel implements Parcelable {
 	private String imageSmallFullName;
 	private String imageMediumFullName;
 	private String imageName;
+	private String imageURL;
 	private String keywords;
 	private String similarKeywords;
+	private List<String> similarKeywordsArray = new ArrayList<String>();
+	private List<String> similarSmallImageURLArray = new ArrayList<String>();
+	private List<String> similarOriginalImageURLArray = new ArrayList<String>();
 	private String fileDir;
 	private int index;
-	
-	public String getFileDir() {
-		return fileDir;
-	}
 
-	public void setFileDir(String fileDir) {
-		this.fileDir = fileDir;
-	}
 
 	public Image2TextPresentationModel() {
 		super();
@@ -42,8 +41,11 @@ public class Image2TextPresentationModel implements Parcelable {
 		this.imageSmallFullName = in.readString();
 		this.imageMediumFullName = in.readString();
 		this.imageName = in.readString();
+		this.imageURL = in.readString();
 		this.keywords = in.readString();
-		this.similarKeywords = in.readString();
+		in.readStringList(this.similarKeywordsArray);
+		in.readStringList(this.similarSmallImageURLArray);
+		in.readStringList(this.similarOriginalImageURLArray);
 		this.fileDir = in.readString();
 		this.index = in.readInt();
 	}
@@ -58,12 +60,38 @@ public class Image2TextPresentationModel implements Parcelable {
 		dest.writeString(this.imageSmallFullName);
 		dest.writeString(this.imageMediumFullName);
 		dest.writeString(this.imageName);
+		dest.writeString(this.imageURL);
 		dest.writeString(this.keywords);
 		dest.writeString(this.similarKeywords);
+		dest.writeStringList(this.similarKeywordsArray);
+		dest.writeStringList(this.similarSmallImageURLArray);
+		dest.writeStringList(this.similarOriginalImageURLArray);
 		dest.writeString(this.fileDir);
 		dest.writeInt(this.index);
 		
 	}
+	public String getImageURL() {
+		return imageURL;
+	}
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
+	public List<String> getSimilarKeywordsArray() {
+		return similarKeywordsArray;
+	}
+
+	public void setSimilarKeywordsArray(List<String> similarKeywordsArray) {
+		this.similarKeywordsArray = similarKeywordsArray;
+	}
+	
+	public String getFileDir() {
+		return fileDir;
+	}
+
+	public void setFileDir(String fileDir) {
+		this.fileDir = fileDir;
+	}
+
 	public ImageHelper createImage() {
 		return new ImageHelper(this.getImageOriginalFullName());
 	}
@@ -181,6 +209,32 @@ public class Image2TextPresentationModel implements Parcelable {
 		this.index = index;
 	}
 
-	
+
+    public static final Creator<Image2TextPresentationModel> CREATOR = new Creator<Image2TextPresentationModel>() {
+        public Image2TextPresentationModel createFromParcel(Parcel source) {
+            return new Image2TextPresentationModel(source);
+        }
+
+        public Image2TextPresentationModel[] newArray(int size) {
+            return new Image2TextPresentationModel[size];
+        }
+    };
+
+
+	public List<String> getSimilarSmallImageURLArray() {
+		return similarSmallImageURLArray;
+	}
+	public void setSimilarSmallImageURLArray(List<String> similarSmallImageURLArray) {
+		this.similarSmallImageURLArray = similarSmallImageURLArray;
+	}
+	public List<String> getSimilarOriginalImageURLArray() {
+		return similarOriginalImageURLArray;
+	}
+	public void setSimilarOriginalImageURLArray(
+			List<String> similarOriginalImageURLArray) {
+		this.similarOriginalImageURLArray = similarOriginalImageURLArray;
+	}
+
+
 
 }

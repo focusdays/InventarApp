@@ -33,11 +33,18 @@ public class Image2TextAsyncTask extends AsyncTask<Image2TextPresentationModel, 
 				JsonHelper json = new JsonHelper();
 				JSONObject image2TextResponse = json.getJSON(smallImage.detectKeywords());
 				model.setKeywords((String)json.evalExpression(image2TextResponse, "keywords"));
+				model.setImageURL((String)json.evalExpression(image2TextResponse, "image"));
 				
 				JSONArray similarImages = json.evalArrayExpression(image2TextResponse, "similarImages");
 				StringBuffer buffer = new StringBuffer();
 				for (int i = 0; i < similarImages.length(); i++) {
-					buffer.append(json.evalExpression(similarImages.getJSONObject(i), "pt"));
+					String similarImageText = json.evalExpression(similarImages.getJSONObject(i), "pt").toString();
+					String similarSmallImageURL = json.evalExpression(similarImages.getJSONObject(i), "tu").toString();
+					String similarOriginalImageURL = json.evalExpression(similarImages.getJSONObject(i), "ou").toString();
+					model.getSimilarKeywordsArray().add(similarImageText);
+					model.getSimilarSmallImageURLArray().add(similarSmallImageURL);
+					model.getSimilarOriginalImageURLArray().add(similarOriginalImageURL);
+					buffer.append(similarImageText);
 					buffer.append("\n");
 				}
 				model.setSimilarKeywords(buffer.toString());

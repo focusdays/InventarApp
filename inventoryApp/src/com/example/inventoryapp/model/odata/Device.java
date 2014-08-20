@@ -1,15 +1,13 @@
 package com.example.inventoryapp.model.odata;
 
 
-public class Device  {
+public class Device extends AbstractModel {
 	private Integer deviceID;
 	private String deviceName;
 	private String deviceType;
 	private Person person;
 	
-	private boolean created;
-	private boolean updated;
-	private boolean deleted;
+
 	
 	public Device() {
 	}
@@ -46,30 +44,5 @@ public class Device  {
 	public void setPerson(Person person) {
 		this.person = person;
 	}
-
-	public boolean isCreated() {
-		return created;
-	}
-
-	public void setCreated(boolean created) {
-		this.created = created;
-	}
-
-	public boolean isUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(boolean updated) {
-		this.updated = updated;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-	
 	
 }

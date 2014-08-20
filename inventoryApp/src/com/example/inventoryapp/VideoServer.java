@@ -30,7 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.inventoryapp.model.CommodityModel;
+import com.example.inventoryapp.model.odata.Commodity;
 import com.example.inventoryappbase.core.AsyncResponse;
 import com.example.inventoryappbase.core.image.Image2TextAsyncTask;
 import com.example.inventoryappbase.core.image.Image2TextPresentationModel;
@@ -50,11 +50,11 @@ public class VideoServer extends RoboActivity implements SurfaceHolder.Callback,
 	@InjectView(R.id.capture_number)	private TextView capture_number;
 	@InjectView(R.id.capture_number_title) 	private TextView capture_number_title;
 	
-	private ArrayList<CommodityModel> capturedImages = new ArrayList<CommodityModel>();
+	private ArrayList<Commodity> capturedImages = new ArrayList<Commodity>();
 	int detectingImages = 0;
 
 	private void addCapturedImage(File newFileName) {
-		CommodityModel newModel = new CommodityModel();
+		Commodity newModel = new Commodity();
 		newModel.setCommodityPicture(newFileName.getAbsolutePath());
 		this.capturedImages.add(newModel);
 		this.capture_number.setText(Integer.toString(this.capturedImages.size()));
@@ -78,7 +78,7 @@ public class VideoServer extends RoboActivity implements SurfaceHolder.Callback,
 		}
 		return detectingImages;
 	}
-	private CommodityModel getCapturedImage(int i) {
+	private Commodity getCapturedImage(int i) {
 		return capturedImages.get(i);
 	}
 
@@ -117,7 +117,7 @@ public class VideoServer extends RoboActivity implements SurfaceHolder.Callback,
 		AsyncResponse<Image2TextPresentationModel, Image2TextPresentationModel> response = new AsyncResponse<Image2TextPresentationModel, Image2TextPresentationModel>() {
 			@Override
 			public void processFinish(Image2TextPresentationModel model) {
-				CommodityModel commodity = getCapturedImage(model.getIndex());
+				Commodity commodity = getCapturedImage(model.getIndex());
 				commodity.setCommodityTitle(model.getKeywords());
 	            Toast.makeText(getApplicationContext(), "keywords detected: "+model.getKeywords(), Toast.LENGTH_SHORT).show();
 	    		stopDetecting();
@@ -148,7 +148,8 @@ public class VideoServer extends RoboActivity implements SurfaceHolder.Callback,
             	stop_camera();
         		Intent result = new Intent();
         		result.putExtra("newIndexStart", 0);
-        		result.putExtra("newIndexLenght", 0);
+        		result.putExtra("newIndexLenght", capturedImages.size());
+        		result.putParcelableArrayListExtra("newCommodities", capturedImages);
         		setResult(RESULT_OK, result);
         		finish();
             }
