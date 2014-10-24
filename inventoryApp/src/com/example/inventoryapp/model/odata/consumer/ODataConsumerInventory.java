@@ -133,7 +133,7 @@ public class ODataConsumerInventory {
 		return relatedOEntities;
 	}
 	
-	
+
 	/**
 	 * 
 	 * @param personId
@@ -143,6 +143,7 @@ public class ODataConsumerInventory {
 		if (this.getPerson() != null) return this.getPerson();
 		
 		OEntity personEntity = this.getOEntity("Person", personId);
+		if (personEntity == null) return null;
 		Person person = oEntityModelMapper.mapEntityToPersonModel(personEntity);
 		
 		List<OEntity> deviceEntities = getRelatedOEntitiesByIntId(personEntity, "devices", "Device");
